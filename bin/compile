@@ -51,6 +51,13 @@ echo "-----> Release the hounds! Installing application"
 cd $BUILD_DIR
 cabal install -j5 --disable-library-profiling --disable-executable-profiling --disable-shared
 
+if [ ! -e $BUILD_DIR/Procfile ]; then
+  echo "-----> Generating default Procfile"
+  EXE_NAME=`grep -i executable *.cabal | head -n 1 | sed 's/^executable //gI'`
+  echo "-----> \"web: dist/build/$EXE_NAME/$EXE_NAME\""
+  echo "web: dist/build/$EXE_NAME/$EXE_NAME" >> $BUILD_DIR/Procfile
+fi
+
 echo "-----> Caching Cabal packages"
 echo $FIXED_HOME/.ghc
 shopt -s extglob
